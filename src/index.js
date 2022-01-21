@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {createBrowserHistory} from 'history';
 
 import Root from './components/Root';
 import { configureClient } from './api/client';
@@ -10,13 +11,16 @@ import configureStore from './store';
 
 const accessToken = storage.get('auth');
 configureClient({ accessToken });
-const store = configureStore({auth: !!accessToken});
+const history = createBrowserHistory();
+
+
+const store = configureStore({auth: !!accessToken}, {history});
 
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <Root store={store}>
+    <Root store={store} history={history}>
     <App/>
     </Root>
   </React.StrictMode>,

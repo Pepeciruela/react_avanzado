@@ -6,7 +6,7 @@ import { ConfirmationButton } from '../../common';
 //import { AuthConsumer } from '../context';
 import { logout } from '../service';
 import useMutation from '../../../hooks/useMutation';
-import { authLogin, authLogout } from '../../../store/actions';
+import { authLoginSucess, authLogout } from '../../../store/actions';
 
 const AuthButton = ({ handleLogout, isLogged }) => {
   const mutation = useMutation(logout);
@@ -39,7 +39,7 @@ AuthButton.defaultProps = {
 
 const mapDispatchToProps = (dispatch) => {
   return{
-    isLogged: () => dispatch(authLogin()),
+    isLogged: () => dispatch(authLoginSucess()),
     handleLogout: () => dispatch(authLogout())
   }
 }
