@@ -22,6 +22,7 @@ function AdvertsPage() {
 
   const dispatch = useDispatch();
   const adverts = useSelector(getAllAdverts);
+  console.log(adverts);
 
   useEffect(() => {
     dispatch(loadAdverts());

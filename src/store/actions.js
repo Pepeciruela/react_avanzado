@@ -1,7 +1,8 @@
 //import { login } from '../components/auth/service';
-import {getAdvert} from '../components/adverts/service';
-import { getAdverts } from '../components/adverts/service';
-import { ADVERTS_LOADED_FAILURE, ADVERTS_LOADED_REQUEST, ADVERTS_LOADED_SUCESS, AUTH_LOGIN_FAILURE, AUTH_LOGIN_REQUEST, AUTH_LOGIN_SUCCESS, AUTH_LOGOUT, UI_REST_ERROR } from './types';
+
+import { ADVERTS_LOADED_FAILURE, ADVERTS_LOADED_REQUEST, ADVERTS_LOADED_SUCESS, ADVERT_CREATED_SUCESS, ADVERT_LOADED_SUCESS, AUTH_LOGIN_FAILURE, AUTH_LOGIN_REQUEST, AUTH_LOGIN_SUCCESS, AUTH_LOGOUT, UI_REST_ERROR } from './types';
+import { getAdverts, getAdvert, createAdvert } from '../components/adverts/service';
+import { areAdvertsLoaded, getAdvertSelector } from './selectors';
 
 export function authLoginSucess(){
     return{
@@ -67,6 +68,10 @@ export function advertsLoadedFailure(error){
 export function loadAdverts(){
     return async function(dispatch, getState, {api}){
         dispatch(advertsLoadedRequest())
+        const advertsLoaded = areAdvertsLoaded(getState());
+        if(advertsLoaded){
+            return;
+        }
         try{
             const adverts = await api.adverts.getAdverts();
             dispatch(advertsLoadedSucess(adverts))
@@ -78,17 +83,42 @@ export function loadAdverts(){
 
 export function advertLoadedSucess(advert){
     return{
-        type: ADVERTS_LOADED_SUCESS,
+        type: ADVERT_LOADED_SUCESS,
         payload: advert,
     }
 }
 
 export function loadAdvert(advertId){
     return async function(dispatch, getState, {api}){
+        const advert = getAdverts(getState());
+        if (advert.lenght){
+            const advert = getAdvertSelector(getState(), advertId);
+            dispatch(advertLoadedSucess(advert));
+            return;
+        }
         try{
-            const advert = await api.advert.getAdvert(advertId)
-            dispatch(advertLoadedSucess(advert))
+            const advert = await api.adverts.getAdvert(advertId)
+            dispatch(advertLoadedSucess(advert));
+            
         } catch(error){
+
+        }
+    }
+}
+
+export function createdAdvertSucces(advert){
+    return{
+        type: ADVERT_CREATED_SUCESS,
+        payload: advert, 
+    }
+}
+
+export function createNewAdvert(advert){
+    return async function (dispatch, getState, {api}){
+        try{
+            const createdAdvert = await api.adverts.createAdvert(advert);
+            dispatch(createdAdvertSucces(createdAdvert));
+        } catch{
 
         }
     }

@@ -1,10 +1,13 @@
 import { combineReducers } from 'redux';
-import { ADVERTS_LOADED_FAILURE, ADVERTS_LOADED_REQUEST, ADVERTS_LOADED_SUCESS, ADVERT_LOADED_SUCESS, AUTH_LOGIN_FAILURE, AUTH_LOGIN_REQUEST, AUTH_LOGIN_SUCCESS, AUTH_LOGOUT, UI_REST_ERROR } from './types';
+import { ADVERT_CREATED_SUCESS,ADVERTS_LOADED_FAILURE, ADVERTS_LOADED_REQUEST, ADVERTS_LOADED_SUCESS, ADVERT_LOADED_SUCESS, AUTH_LOGIN_FAILURE, AUTH_LOGIN_REQUEST, AUTH_LOGIN_SUCCESS, AUTH_LOGOUT, UI_REST_ERROR } from './types';
 
 const defaultState = {
     auth: false,
-    adverts: [],
-    advert:[],
+    adverts: {
+        adLoad: null,
+        loaded:false,
+        data:[],
+    },
     ui: {
         isLoading: false,
         error: null,
@@ -41,20 +44,32 @@ export function auth(authState = defaultState.auth, action) {
 export function adverts(advertsState = defaultState.adverts, action){
     switch (action.type) {
         case ADVERTS_LOADED_SUCESS:
-            return action.payload; 
+            return {
+                adLoad:null,
+                loaded:true, 
+                data:action.payload}; 
+        case ADVERT_LOADED_SUCESS:
+            return{
+                ...advertsState,
+                adLoad: action.payload,
+
+            }
+        case ADVERT_CREATED_SUCESS:
+            return {...advertsState, data: [...advertsState.data, action.payload]}
         default:
             return advertsState;
     }
 }
 
-export function advert(advertState = defaultState.advert, action){
-    switch (action.type) {
-        case ADVERT_LOADED_SUCESS:
-            return action.payload;
-        default:
-            return advertState;
-    }
-}
+// export function advert(advertState = defaultState.advert, action){
+//     switch (action.type) {
+//         case ADVERT_LOADED_SUCESS:
+//             return action.payload;
+//         default:
+//             return advertState;
+//     }
+// }
+
 
 export function ui (uiState = defaultState.ui, action) {
     switch (action.type) {

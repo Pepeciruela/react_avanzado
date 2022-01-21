@@ -1,5 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import {connectRouter, routerMiddleware} from 'connected-react-router';
 import *  as reducers from './reducers';
 import thunk from 'redux-thunk'
 import * as auth from '../components/auth/service';
@@ -12,9 +13,9 @@ const rootReducer = combineReducers(reducers);
 function logger(store){
     return function (next){
         return function(action){
-            console.log('**** mirando la acción ****', action);
+            //console.log('**** mirando la acción ****', action);
             next(action);
-            console.log('**** new state ****', store.getState())
+            //console.log('**** new state ****', store.getState())
         };
     };
 }
@@ -32,8 +33,14 @@ function logger(store){
 
 
 const configureStore = (preloadedState, {history}) => {
+    const middlewares = [
+        routerMiddleware(history),
+        thunk.withExtraArgument({api, history}),
+        logger,
+    ];
+    
     const store = createStore(
-        rootReducer, 
+        combineReducers({...reducers, router: connectRouter(history)}), 
         preloadedState, 
         composeWithDevTools(applyMiddleware(
             thunk.withExtraArgument({api, history}),

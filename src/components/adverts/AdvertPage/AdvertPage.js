@@ -8,10 +8,17 @@ import AdvertDetail from './AdvertDetail';
 import { getAdvert, deleteAdvert } from '../service';
 import useQuery from '../../../hooks/useQuery';
 import useMutation from '../../../hooks/useMutation';
-import { getAdvertSelector } from '../../../store/selectors';
+import { getAdvertLoad, getAdvertSelector, getUi } from '../../../store/selectors';
 import { loadAdvert } from '../../../store/actions';
 
-function AdvertPage() {
+export const AdvertPage= ({advert, loadAdvert}) => {
+
+  const {advertId} = useParams();
+  console.log('soy advertid', advertId)
+
+  useEffect(()=>{
+    loadAdvert(advertId);
+  },[loadAdvert, advertId])
   // const { advertId } = useParams();
   // const history = useHistory();
   // const getAdvertById = React.useCallback(
@@ -19,14 +26,15 @@ function AdvertPage() {
   //   [advertId],
   // );
   //const { isLoading, error, data: advert } = useQuery(getAdvertById);
-  const mutation = useMutation(deleteAdvert);
-
-  const dispatch = useDispatch();
-  const advert = useSelector(getAdvertSelector);
-
-  useEffect(() => {
-    dispatch(loadAdvert());
-  },[dispatch])
+  // const mutation = useMutation(deleteAdvert);
+  // console.log('advertId', advertId.advertId);
+  // const dispatch = useDispatch();
+  //const advert = useSelector(getAdvertSelector);
+  // console.log(advert);
+  
+  // const advert = useEffect(() => {
+  //   dispatch(loadAdvert(advertId.advertId));
+  // },[dispatch])
 
   // const handleDelete = () => {
   //   mutation.execute(advertId).then(() => history.push('/'));
@@ -49,4 +57,17 @@ function AdvertPage() {
   );
 }
 
-export default AdvertPage;
+const mapStateToProps = (state) => {
+  return {
+    advert:getAdvertLoad(state)
+  }
+}
+;
+const mapDispatchToProps = (dispatch) => {
+  return{
+    loadAdvert: (advertId) => dispatch(loadAdvert(advertId))
+  }
+  
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(AdvertPage);
