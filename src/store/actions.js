@@ -1,7 +1,7 @@
 //import { login } from '../components/auth/service';
 
-import { ADVERTS_LOADED_FAILURE, ADVERTS_LOADED_REQUEST, ADVERTS_LOADED_SUCESS, ADVERT_CREATED_SUCESS, ADVERT_LOADED_SUCESS, AUTH_LOGIN_FAILURE, AUTH_LOGIN_REQUEST, AUTH_LOGIN_SUCCESS, AUTH_LOGOUT, UI_REST_ERROR } from './types';
-import { getAdverts, getAdvert, createAdvert } from '../components/adverts/service';
+import { ADVERTS_LOADED_FAILURE, ADVERTS_LOADED_REQUEST, ADVERTS_LOADED_SUCESS, ADVERT_CREATED_FAILURE, ADVERT_CREATED_SUCESS, ADVERT_LOADED_FAILURE, ADVERT_LOADED_SUCESS, AUTH_LOGIN_FAILURE, AUTH_LOGIN_REQUEST, AUTH_LOGIN_SUCCESS, AUTH_LOGOUT, DELETE_ADVERT_FAILURE, DELETE_ADVERT_REQUEST, DELETE_ADVERT_SUCESS, UI_REST_ERROR } from './types';
+import { getAdverts, getAdvert, createAdvert, deleteAdvert } from '../components/adverts/service';
 import { areAdvertsLoaded, getAdvertSelector } from './selectors';
 
 export function authLoginSucess(){
@@ -88,8 +88,15 @@ export function advertLoadedSucess(advert){
     }
 }
 
+export function advertLoadedFailure(error){
+    return{
+        type: ADVERT_LOADED_FAILURE,
+        payload: error,
+    }
+}
+
 export function loadAdvert(advertId){
-    return async function(dispatch, getState, {api}){
+    return async function(dispatch, getState, {api, history}){
         const advert = getAdverts(getState());
         if (advert.lenght){
             const advert = getAdvertSelector(getState(), advertId);
@@ -101,6 +108,10 @@ export function loadAdvert(advertId){
             dispatch(advertLoadedSucess(advert));
             
         } catch(error){
+            dispatch(advertLoadedFailure(error))
+            if (error.status === 404){
+                history.replace('/404')
+            }
 
         }
     }
@@ -113,13 +124,54 @@ export function createdAdvertSucces(advert){
     }
 }
 
+export function createdAdvertFailure(error){
+    return{
+        type: ADVERT_CREATED_FAILURE,
+        payload: error, 
+    }
+}
+
 export function createNewAdvert(advert){
-    return async function (dispatch, getState, {api}){
+    return async function (dispatch, getState, {api, history}){
         try{
             const createdAdvert = await api.adverts.createAdvert(advert);
             dispatch(createdAdvertSucces(createdAdvert));
-        } catch{
+            history.push(`/adverts/${createdAdvert.id}`)
+        } catch(error){
+            dispatch(createdAdvertFailure(error))
 
+        }
+    }
+}
+
+export function deleteAdvertRequest(){
+    return{
+        type: DELETE_ADVERT_REQUEST
+    }
+}
+
+export function deleteAdvertSucces(){
+    return{
+        type: DELETE_ADVERT_SUCESS
+    }
+}
+
+export function deleteAdvertFailure(){
+    return{
+        type: DELETE_ADVERT_FAILURE
+    }
+}
+
+export function deleteAd(advertId){
+    return async function (dispatch, getState, {api, history}){
+        dispatch(deleteAdvertRequest())
+        try{
+            const advertDelete = await api.adverts.deleteAdvert(advertId);
+            dispatch(deleteAdvertSucces(advertDelete));
+            history.push('/adverts');
+        }catch(error){
+            dispatch(deleteAdvertFailure(error))
+            
         }
     }
 }

@@ -8,10 +8,10 @@ import AdvertDetail from './AdvertDetail';
 import { getAdvert, deleteAdvert } from '../service';
 import useQuery from '../../../hooks/useQuery';
 import useMutation from '../../../hooks/useMutation';
-import { getAdvertLoad, getAdvertSelector, getUi } from '../../../store/selectors';
-import { loadAdvert } from '../../../store/actions';
+import { getAdvertLoad, getAdvertSelector, getDeleteAdvert, getUi } from '../../../store/selectors';
+import { deleteAd, loadAdvert } from '../../../store/actions';
 
-export const AdvertPage= ({advert, loadAdvert}) => {
+export const AdvertPage= ({advert, loadAdvert, advertDelete}) => {
 
   const {advertId} = useParams();
   console.log('soy advertid', advertId)
@@ -40,7 +40,7 @@ export const AdvertPage= ({advert, loadAdvert}) => {
   //   mutation.execute(advertId).then(() => history.push('/'));
   // };
 
-  const handleDelete = ()=>{}
+  //const handleDelete = {}
 
   // if (error?.statusCode === 401 || mutation.error?.statusCode === 401) {
   //   return <Redirect to="/login" />;
@@ -52,20 +52,22 @@ export const AdvertPage= ({advert, loadAdvert}) => {
 
   return (
     <Layout>
-      {advert && <AdvertDetail {...advert} onDelete={handleDelete} />}
+      {advert && <AdvertDetail {...advert} onDelete={()=>advertDelete(advertId)} />}
     </Layout>
   );
 }
 
 const mapStateToProps = (state) => {
   return {
-    advert:getAdvertLoad(state)
+    advert:getAdvertLoad(state),
+    //delete: getDeleteAdvert(state),
   }
 }
 ;
 const mapDispatchToProps = (dispatch) => {
   return{
-    loadAdvert: (advertId) => dispatch(loadAdvert(advertId))
+    loadAdvert: (advertId) => dispatch(loadAdvert(advertId)),
+    advertDelete: (advertId) => dispatch(deleteAd(advertId)),
   }
   
 }

@@ -12,8 +12,10 @@ import { createNewAdvert } from '../../../store/actions';
 function NewAdvertPage({ history }) {
 
   const dispatch = useDispatch();
+  
 
-  // const mutation = useMutation(createAdvert);
+
+  //const mutation = useMutation(createAdvert);
 
   const handleSubmit = newAdvert => {
     dispatch(createNewAdvert(newAdvert))
