@@ -8,10 +8,10 @@ import AdvertDetail from './AdvertDetail';
 import { getAdvert, deleteAdvert } from '../service';
 import useQuery from '../../../hooks/useQuery';
 import useMutation from '../../../hooks/useMutation';
-import { getAdvertLoad, getAdvertSelector, getDeleteAdvert, getUi } from '../../../store/selectors';
+import { getAdvertLoad, getAdvertSelector, getUi } from '../../../store/selectors';
 import { deleteAd, loadAdvert } from '../../../store/actions';
 
-export const AdvertPage= ({advert, loadAdvert, advertDelete}) => {
+export const AdvertPage= ({advert, loadAdvert, advertDelete, load}) => {
 
   const {advertId} = useParams();
   console.log('soy advertid', advertId)
@@ -50,6 +50,10 @@ export const AdvertPage= ({advert, loadAdvert, advertDelete}) => {
   //   return <Redirect to="/404" />;
   // }
 
+  if(load){
+    return(<h1>Delete advert</h1>)
+  };
+
   return (
     <Layout>
       {advert && <AdvertDetail {...advert} onDelete={()=>advertDelete(advertId)} />}
@@ -60,7 +64,7 @@ export const AdvertPage= ({advert, loadAdvert, advertDelete}) => {
 const mapStateToProps = (state) => {
   return {
     advert:getAdvertLoad(state),
-    //delete: getDeleteAdvert(state),
+    load: getAdvertLoad(state),
   }
 }
 ;

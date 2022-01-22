@@ -136,7 +136,7 @@ export function createNewAdvert(advert){
         try{
             const createdAdvert = await api.adverts.createAdvert(advert);
             dispatch(createdAdvertSucces(createdAdvert));
-            history.push(`/adverts/${createdAdvert.id}`)
+            history.replace(`/adverts/${createdAdvert.id}`)
         } catch(error){
             dispatch(createdAdvertFailure(error))
 
@@ -167,8 +167,8 @@ export function deleteAd(advertId){
         dispatch(deleteAdvertRequest())
         try{
             const advertDelete = await api.adverts.deleteAdvert(advertId);
-            dispatch(deleteAdvertSucces(advertDelete));
-            history.push('/adverts');
+            dispatch(deleteAdvertSucces());
+            history.replace('/adverts');
         }catch(error){
             dispatch(deleteAdvertFailure(error))
             
