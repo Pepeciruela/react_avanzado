@@ -4,11 +4,9 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { AdvertPage, AdvertsPage, NewAdvertPage } from '../adverts';
 import { LoginPage, PrivateRoute } from '../auth';
-//import { AuthProvider } from '../auth/context';
 import NotFoundPage from './NotFoundPage';
 
 function App() {
-  //const [isLogged, setIsLogged] = React.useState(isInitiallyLogged);
 
   const handleLogin = () => {};
   const handleLogout = () => {};
@@ -16,7 +14,6 @@ function App() {
   const authProps = { handleLogin, handleLogout };
 
   return (
-    //<AuthProvider {...authProps}>
       <Switch>
         <PrivateRoute exact path="/adverts/new" component={NewAdvertPage} />
         <PrivateRoute exact path="/adverts/:advertId">
@@ -34,7 +31,6 @@ function App() {
         </Route>
         <Redirect to="/404" />
       </Switch>
-    //</AuthProvider>
   );
 }
 

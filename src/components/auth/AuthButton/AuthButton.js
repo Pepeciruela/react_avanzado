@@ -3,7 +3,6 @@ import T from 'prop-types';
 
 import { connect } from 'react-redux';
 import { ConfirmationButton } from '../../common';
-//import { AuthConsumer } from '../context';
 import { logout } from '../service';
 import useMutation from '../../../hooks/useMutation';
 import { authLoginSucess, authLogout } from '../../../store/actions';
@@ -45,9 +44,5 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const ConnectedAuthButton = connect(undefined, mapDispatchToProps)(AuthButton);
-
-// const ConnectedAuthButton = props => (
-//   <AuthConsumer>{auth => <AuthButton {...auth} {...props} />}</AuthConsumer>
-// );
 
 export default ConnectedAuthButton;

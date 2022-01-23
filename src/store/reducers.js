@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { ADVERT_CREATED_SUCESS,ADVERTS_LOADED_FAILURE, ADVERTS_LOADED_REQUEST, ADVERTS_LOADED_SUCESS, ADVERT_LOADED_SUCESS, AUTH_LOGIN_FAILURE, AUTH_LOGIN_REQUEST, AUTH_LOGIN_SUCCESS, AUTH_LOGOUT, UI_REST_ERROR, ADVERT_CREATED_FAILURE, DELETE_ADVERT_REQUEST, DELETE_ADVERT_SUCESS, DELETE_ADVERT_FAILURE } from './types';
 
-const defaultState = {
+export const defaultState = {
     auth: false,
     adverts: {
         adLoad: null,
@@ -14,22 +14,6 @@ const defaultState = {
         error: null,
     }
 };
-
-/*const reducer = (state = defaultState, action) => {
-    switch (action.type) {
-        case AUTH_LOGIN:
-        return {...state, auth: true};
-
-        case AUTH_LOGOUT:
-            return {...state, auth: false};
-
-        case ADVERTS_LOADED:
-            return {...state, adverts: action.payload}; 
-    
-        default:
-            return state;
-    }
-};*/
 
 export function auth(authState = defaultState.auth, action) {
     switch (action.type) {
@@ -72,15 +56,6 @@ export function adverts(advertsState = defaultState.adverts, action){
     }
 }
 
-// export function advert(advertState = defaultState.advert, action){
-//     switch (action.type) {
-//         case ADVERT_LOADED_SUCESS:
-//             return action.payload;
-//         default:
-//             return advertState;
-//     }
-// }
-
 
 export function ui (uiState = defaultState.ui, action) {
     switch (action.type) {
@@ -118,16 +93,5 @@ export function ui (uiState = defaultState.ui, action) {
     }
 }
 
-/*function combinedReducer(state = defaultState, action) {
-    return {
-        auth: auth(state.auth, action),
-        adverts: adverts(state.adverts, action),
-    }
-}*/
-
-/*const combineReducerWithRedux = combineReducers ({
-    auth: auth,
-    adverts: adverts,
-});*/
 
 
